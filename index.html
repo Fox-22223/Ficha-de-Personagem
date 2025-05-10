@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ficha de Personagem Sombria</title>
+  <style>
+    body {
+      background-color: #121212;
+      color: #e6e6e6;
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #1a1a1a;
+      padding: 30px;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+    h1 {
+      font-size: 2.5rem;
+      color: crimson;
+      text-shadow: 0 0 10px crimson;
+      margin: 0;
+    }
+    form {
+      max-width: 650px;
+      margin: 20px auto;
+      background-color: #1a1a1a;
+      padding: 25px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px #660000;
+      color: #fff;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-size: 1rem;
+      font-weight: bold;
+    }
+    input, textarea, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 5px;
+      border: none;
+      background-color: #333;
+      color: #fff;
+      font-size: 1rem;
+    }
+    input[type="file"] {
+      padding: 0;
+    }
+    button {
+      background-color: crimson;
+      cursor: pointer;
+      font-size: 1.2rem;
+    }
+    button:hover {
+      background-color: darkred;
+    }
+    textarea {
+      min-height: 100px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🩸 Ficha Sombria - Envio de Personagem</h1>
+  </header>
+
+  <form id="fichaForm">
+    <div class="form-group">
+      <label for="nome">Nome:</label>
+      <input type="text" id="nome" name="nome" required>
+    </div>
+
+    <div class="form-group">
+      <label for="raca">Raça:</label>
+      <input type="text" id="raca" name="raca" required>
+    </div>
+
+    <div class="form-group">
+      <label for="idade">Idade (aparente/real):</label>
+      <input type="text" id="idade" name="idade" required>
+    </div>
+
+    <div class="form-group">
+      <label for="aparencia">Aparência (Carregue a imagem):</label>
+      <input type="file" id="aparencia" name="aparencia" accept="image/*" required>
+    </div>
+
+    <div class="form-group">
+      <label for="historia">História (Resumo):</label>
+      <textarea id="historia" name="historia"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="poderes">Poderes:</label>
+      <textarea id="poderes" name="poderes"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="fraquezas">Fraquezas:</label>
+      <textarea id="fraquezas" name="fraquezas"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="extras">Extras (OFF):</label>
+      <textarea id="extras" name="extras"></textarea>
+    </div>
+
+    <button type="submit">Enviar Ficha</button>
+  </form>
+
+  <script>
+    const webhookURL = 'https://discord.com/api/webhooks/1370785743785689139/goFrNn6cP22UDkjLwuNFT9j8iuk7Usye3CCv4x_XMec0_FntwvbyiyJ360tDjk8L1d1u';  // Substitua pelo seu webhook
+
+    document.getElementById('fichaForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(e.target);
+      const file = formData.get('aparencia');
+      
+      // Fazendo o upload da imagem para o Imgur
+      const imgurUploadResponse = await uploadToImgur(file);
+      const imgurLink = imgurUploadResponse?.data?.link;
+
+      if (!imgurLink) {
+        alert('Falha no upload da imagem.');
+        return;
+      }
+
+      // Organizando os dados da ficha para enviar no Discord
+      const nome = formData.get('nome');
+      const raca = formData.get('raca');
+      const idade = formData.get('idade');
+      const historia = formData.get('historia');
+      const poderes = formData.get('poderes');
+      const fraquezas = formData.get('fraquezas');
+      const extras = formData.get('extras');
+
+      const data = {
+        content: `📜 **Ficha de Personagem Submetida**`,
+        embeds: [{
+          title: `Ficha de ${nome}`,
+          description: `**Raça**: ${raca}\n**Idade**: ${idade}`,
+          fields: [
+            { name: 'História', value: historia || 'Não fornecido', inline: true },
+            { name: 'Poderes', value: poderes || 'Não fornecido', inline: true },
+            { name: 'Fraquezas', value: fraquezas || 'Não fornecido', inline: true },
+            { name: 'Extras (OFF)', value: extras || 'Não fornecido', inline: true },
+          ],
+          image: { url: imgurLink },
+          color: 0x660000,
+          footer: { text: 'Ficha Sombria - RP' }
+        }]
+      };
+
+      // Enviando a ficha para o Discord
+      await fetch(webhookURL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+
+      alert('Ficha enviada com sucesso!');
+      e.target.reset();
+    });
+
+    async function uploadToImgur(file) {
+      const formData = new FormData();
+      formData.append('image', file);
+      
+      const response = await fetch('https://api.imgur.com/3/image', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Client-ID 20907a449c20808',  // Seu Client-ID do Imgur
+        },
+        body: formData,
+      });
+
+      const data = await response.json();
+      return data;
+    }
+  </script>
+</body>
+</html>
