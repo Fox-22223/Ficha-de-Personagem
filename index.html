@@ -2,51 +2,89 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Início do RP Sombrio</title>
+  <title>Até Demeter...title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
-      background-color: #0d0d0d;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(145deg, #0d0d0d, #1a1a1a);
       color: #e0e0e0;
       font-family: 'Georgia', serif;
-      padding: 40px;
-      line-height: 1.6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
     }
 
     .story-box {
-      background-color: #1a1a1a;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 0 20px #900;
+      background-color: #111;
+      padding: 40px 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 25px rgba(255, 0, 0, 0.25);
       max-width: 700px;
-      margin: auto;
+      width: 90%;
+      text-align: center;
+    }
+
+    h2 {
+      color: crimson;
+      text-shadow: 0 0 10px crimson;
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 1.1rem;
+      line-height: 1.7;
+      color: #ccc;
     }
 
     .choices {
-      margin-top: 20px;
+      margin-top: 30px;
     }
 
     .choice-btn {
-      background-color: #900;
+      background-color: crimson;
       color: #fff;
       border: none;
-      padding: 10px 15px;
-      border-radius: 6px;
+      padding: 12px 20px;
+      border-radius: 8px;
       cursor: pointer;
-      margin-right: 10px;
+      margin: 10px;
+      font-size: 1rem;
+      transition: background 0.3s, transform 0.2s;
+      box-shadow: 0 0 10px #900;
     }
 
     .choice-btn:hover {
-      background-color: #700;
+      background-color: darkred;
+      transform: scale(1.05);
     }
 
     #startFicha {
       display: none;
-      margin-top: 30px;
-      background-color: #007bff;
+      margin-top: 35px;
+      background-color: #444;
+      color: #fff;
+      border: 2px solid crimson;
+      font-size: 1.1rem;
+      padding: 12px 25px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
     }
 
     #startFicha:hover {
-      background-color: #0056b3;
+      background-color: crimson;
+      border-color: darkred;
+    }
+
+    @media (max-width: 600px) {
+      .choice-btn, #startFicha {
+        width: 100%;
+        margin: 10px 0;
+      }
     }
   </style>
 </head>
