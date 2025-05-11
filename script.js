@@ -6,11 +6,16 @@ document.getElementById('fichaForm').addEventListener('submit', async (e) => {
   const formData = new FormData(e.target);
   const file = formData.get('aparencia');
 
-  const imgurUploadResponse = await uploadToImgur(file);
-  const imgurLink = imgurUploadResponse?.data?.link;
+  if (file) {
+    const imgurUploadResponse = await uploadToImgur(file);
+    const imgurLink = imgurUploadResponse?.data?.link;
 
-  if (!imgurLink) {
-    alert('Falha no upload da imagem.');
+    if (!imgurLink) {
+      alert('Falha no upload da imagem.');
+      return;
+    }
+  } else {
+    alert('Por favor, carregue uma imagem.');
     return;
   }
 
@@ -28,40 +33,60 @@ document.getElementById('fichaForm').addEventListener('submit', async (e) => {
       title: `Ficha de ${nome}`,
       description: `**Raça**: ${raca}\n**Idade**: ${idade}`,
       fields: [
-        { name: 'História', value: historia || 'Não fornecido', inline: true },
+        { name: 'História', value: historia || 'Não fornecido', inline: false },
         { name: 'Poderes', value: poderes || 'Não fornecido', inline: true },
         { name: 'Fraquezas', value: fraquezas || 'Não fornecido', inline: true },
         { name: 'Extras (OFF)', value: extras || 'Não fornecido', inline: true },
       ],
-      image: { url: imgurLink },
+      image: { url: imgurLink }, // Link da imagem enviada
       color: 0x660000,
       footer: { text: 'Ficha Sombria - RP' }
     }]
   };
 
-  await fetch(webhookURL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(data)
-  });
+  try {
+    const response = await fetch(webhookURL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    });
 
-  alert('Ficha enviada com sucesso!');
-  e.target.reset();
+    if (response.ok) {
+      alert('Ficha enviada com sucesso!');
+      e.target.reset();
+    } else {
+      alert('Erro ao enviar a ficha. Tente novamente.');
+    }
+  } catch (error) {
+    alert('Ocorreu um erro ao enviar a ficha. Verifique sua conexão e tente novamente.');
+  }
 });
 
 async function uploadToImgur(file) {
   const formData = new FormData();
   formData.append('image', file);
 
-  const response = await fetch('https://api.imgur.com/3/image', {
-    method: 'POST',
-    headers: {
-      'Authorization': 'Client-ID 20907a449c20808'
-    },
-    body: formData
-  });
+  try {
+    const response = await fetch('https://api.imgur.com/3/image', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Client-ID 20907a449c20808'
+      },
+      body: formData
+    });
 
-  return await response.json();
+    const result = await response.json();
+
+    if (!response.ok) {
+      alert('Erro ao fazer upload da imagem.');
+      return null;
+    }
+
+    return result;
+  } catch (error) {
+    alert('Erro ao tentar fazer o upload da imagem. Tente novamente.');
+    return null;
+  }
 }
