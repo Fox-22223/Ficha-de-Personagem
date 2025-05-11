@@ -1,24 +1,9 @@
-const webhookURL = 'https://discord.com/api/webhooks/1371132616715141170/P6CMU19t43eQm3fuMSXOxFSpg0Braq08aJdbKnc_RgB12X0nJyl-let0BZgXtrjtfvzr';
-
+// Este código assume que o formulário possui o id 'fichaForm'
 document.getElementById('fichaForm').addEventListener('submit', async (e) => {
   e.preventDefault();
 
   const formData = new FormData(e.target);
-  const file = formData.get('aparencia');
-
-  if (file) {
-    const imgurUploadResponse = await uploadToImgur(file);
-    const imgurLink = imgurUploadResponse?.data?.link;
-
-    if (!imgurLink) {
-      alert('Falha no upload da imagem.');
-      return;
-    }
-  } else {
-    alert('Por favor, carregue uma imagem.');
-    return;
-  }
-
+  const file = formData.get('aparencia'); // Se você estiver enviando uma imagem
   const nome = formData.get('nome');
   const raca = formData.get('raca');
   const idade = formData.get('idade');
@@ -27,66 +12,60 @@ document.getElementById('fichaForm').addEventListener('submit', async (e) => {
   const fraquezas = formData.get('fraquezas');
   const extras = formData.get('extras');
 
-  const data = {
-    content: `📜 **Ficha de Personagem Submetida**`,
-    embeds: [{
-      title: `Ficha de ${nome}`,
-      description: `**Raça**: ${raca}\n**Idade**: ${idade}`,
-      fields: [
-        { name: 'História', value: historia || 'Não fornecido', inline: false },
-        { name: 'Poderes', value: poderes || 'Não fornecido', inline: true },
-        { name: 'Fraquezas', value: fraquezas || 'Não fornecido', inline: true },
-        { name: 'Extras (OFF)', value: extras || 'Não fornecido', inline: true },
-      ],
-      image: { url: imgurLink }, // Link da imagem enviada
-      color: 0x660000,
-      footer: { text: 'Ficha Sombria - RP' }
-    }]
-  };
+  // Verificar se a imagem foi enviada e fazer upload para o Imgur
+  const imgurUploadResponse = await uploadToImgur(file);
+  const imgurLink = imgurUploadResponse?.data?.link;
 
+  if (!imgurLink) {
+    alert('Falha no upload da imagem.');
+    return;
+  }
+
+  // Enviar os dados para o servidor onde o bot está
   try {
-    const response = await fetch(webhookURL, {
+    const response = await fetch('http://localhost:3000/ficha', {  // Substitua com o URL do seu servidor
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify({
+        nome,
+        raca,
+        idade,
+        historia,
+        poderes,
+        fraquezas,
+        extras,
+        imagemUrl: imgurLink
+      })
     });
 
+    const result = await response.json();
     if (response.ok) {
       alert('Ficha enviada com sucesso!');
-      e.target.reset();
     } else {
-      alert('Erro ao enviar a ficha. Tente novamente.');
+      alert('Erro ao enviar a ficha!');
     }
   } catch (error) {
-    alert('Ocorreu um erro ao enviar a ficha. Verifique sua conexão e tente novamente.');
+    console.error('Erro ao enviar a ficha:', error);
+    alert('Erro ao enviar a ficha para o servidor.');
   }
+
+  e.target.reset();
 });
 
+// Função para enviar a imagem para o Imgur
 async function uploadToImgur(file) {
   const formData = new FormData();
   formData.append('image', file);
 
-  try {
-    const response = await fetch('https://api.imgur.com/3/image', {
-      method: 'POST',
-      headers: {
-        'Authorization': 'Client-ID 20907a449c20808'
-      },
-      body: formData
-    });
+  const response = await fetch('https://api.imgur.com/3/image', {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Client-ID 20907a449c20808'  // Substitua com a sua Client-ID do Imgur
+    },
+    body: formData
+  });
 
-    const result = await response.json();
-
-    if (!response.ok) {
-      alert('Erro ao fazer upload da imagem.');
-      return null;
-    }
-
-    return result;
-  } catch (error) {
-    alert('Erro ao tentar fazer o upload da imagem. Tente novamente.');
-    return null;
-  }
+  return await response.json();
 }
