@@ -1,109 +1,51 @@
-<form id="fichaForm">
-  <div class="form-group">
-    <label for="nome">Nome:</label>
-    <input type="text" id="nome" name="nome" required />
-  </div>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Envio de Ficha - RPG</title>
+    <link rel="stylesheet" href="style.css"> <!-- Link para o arquivo CSS -->
+</head>
+<body>
+    <header>
+        <h1>Envio de Ficha de Personagem</h1>
+    </header>
 
-  <div class="form-group">
-    <label for="raca">Raça:</label>
-    <input type="text" id="raca" name="raca" required />
-  </div>
+    <section class="form-container">
+        <form id="fichaForm" enctype="multipart/form-data">
+            <label for="nome">Nome:</label>
+            <input type="text" id="nome" name="nome" required>
 
-  <div class="form-group">
-    <label for="idade">Idade (aparente/real):</label>
-    <input type="text" id="idade" name="idade" required />
-  </div>
+            <label for="raca">Raça:</label>
+            <input type="text" id="raca" name="raca" required>
 
-  <div class="form-group">
-    <label>Aparência (Carregue a imagem):</label>
-    <label class="upload-label" for="aparencia">📁 Adicionar Imagem</label>
-    <input type="file" id="aparencia" name="aparencia" accept="image/*" required />
-  </div>
+            <label for="idade">Idade:</label>
+            <input type="text" id="idade" name="idade" required>
 
-  <div class="form-group">
-    <label for="historia">História (Resumo):</label>
-    <textarea id="historia" name="historia"></textarea>
-  </div>
+            <label for="historia">História:</label>
+            <textarea id="historia" name="historia" rows="5" required></textarea>
 
-  <div class="form-group">
-    <label for="poderes">Poderes:</label>
-    <textarea id="poderes" name="poderes"></textarea>
-  </div>
+            <label for="poderes">Poderes:</label>
+            <textarea id="poderes" name="poderes" rows="3" required></textarea>
 
-  <div class="form-group">
-    <label for="fraquezas">Fraquezas:</label>
-    <textarea id="fraquezas" name="fraquezas"></textarea>
-  </div>
+            <label for="fraquezas">Fraquezas:</label>
+            <textarea id="fraquezas" name="fraquezas" rows="3" required></textarea>
 
-  <div class="form-group">
-    <label for="extras">Extras (OFF):</label>
-    <textarea id="extras" name="extras"></textarea>
-  </div>
+            <label for="extras">Extras:</label>
+            <textarea id="extras" name="extras" rows="3"></textarea>
 
-  <button type="submit">Enviar Ficha</button>
-</form>
+            <label for="aparencia">Imagem de Aparência:</label>
+            <input type="file" id="aparencia" name="aparencia" accept="image/*">
 
-<script>
-  const webhookURL = 'http://localhost:3000/ficha';  // Certifique-se de alterar para o seu servidor
+            <button type="submit">Enviar Ficha</button>
+        </form>
+    </section>
 
-  document.getElementById('fichaForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
+    <footer>
+        <p>&copy; 2025 Ficha Sombria</p>
+    </footer>
 
-    const formData = new FormData(e.target);
-    const file = formData.get('aparencia');
+    <script src="script.js"></script> <!-- Link para o arquivo JavaScript -->
+</body>
+</html>
 
-    const imgurUploadResponse = await uploadToImgur(file);
-    const imgurLink = imgurUploadResponse?.data?.link;
-
-    if (!imgurLink) {
-      alert('Falha no upload da imagem.');
-      return;
-    }
-
-    const nome = formData.get('nome');
-    const raca = formData.get('raca');
-    const idade = formData.get('idade');
-    const historia = formData.get('historia');
-    const poderes = formData.get('poderes');
-    const fraquezas = formData.get('fraquezas');
-    const extras = formData.get('extras');
-
-    const data = {
-      nome,
-      raca,
-      idade,
-      historia,
-      poderes,
-      fraquezas,
-      extras,
-      imagemUrl: imgurLink
-    };
-
-    // Enviar os dados via fetch
-    await fetch(webhookURL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    });
-
-    alert('Ficha enviada com sucesso!');
-    e.target.reset();
-  });
-
-  async function uploadToImgur(file) {
-    const formData = new FormData();
-    formData.append('image', file);
-
-    const response = await fetch('https://api.imgur.com/3/image', {
-      method: 'POST',
-      headers: {
-        'Authorization': 'Client-ID 20907a449c20808'  // Sua chave do Imgur
-      },
-      body: formData
-    });
-
-    return await response.json();
-  }
-</script>
