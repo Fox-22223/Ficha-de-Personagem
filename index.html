@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ficha de Personagem Sombria</title>
   <style>
     body {
@@ -12,18 +12,21 @@
       margin: 0;
       padding: 0;
     }
+
     header {
       background-color: #1a1a1a;
       padding: 30px;
       text-align: center;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     }
+
     h1 {
       font-size: 2.5rem;
       color: crimson;
       text-shadow: 0 0 10px crimson;
       margin: 0;
     }
+
     form {
       max-width: 650px;
       margin: 20px auto;
@@ -31,14 +34,15 @@
       padding: 25px;
       border-radius: 8px;
       box-shadow: 0 0 10px #660000;
-      color: #fff;
     }
+
     label {
       display: block;
       margin-top: 15px;
       font-size: 1rem;
       font-weight: bold;
     }
+
     input, textarea, button {
       width: 100%;
       padding: 10px;
@@ -49,23 +53,55 @@
       color: #fff;
       font-size: 1rem;
     }
-    input[type="file"] {
-      padding: 0;
+
+    textarea {
+      min-height: 100px;
     }
+
     button {
       background-color: crimson;
       cursor: pointer;
       font-size: 1.2rem;
+      transition: background-color 0.3s ease;
     }
+
     button:hover {
       background-color: darkred;
     }
-    textarea {
-      min-height: 100px;
-    }
+
     .form-group {
       margin-bottom: 20px;
     }
+
+    /* Estilizando botão de upload */
+    .upload-label {
+      display: inline-block;
+      background-color: #292929;
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+      text-align: center;
+      margin-top: 10px;
+      border: 2px dashed #444;
+      transition: all 0.3s ease;
+    }
+
+    .upload-label:hover {
+      background-color: #333;
+      border-color: crimson;
+      color: crimson;
+    }
+
+    .upload-label i {
+      margin-right: 8px;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
   </style>
 </head>
 <body>
@@ -91,6 +127,9 @@
 
     <div class="form-group">
       <label for="aparencia">Aparência (Carregue a imagem):</label>
+      <label for="aparencia" class="upload-label">
+        📁 Adicionar Imagem
+      </label>
       <input type="file" id="aparencia" name="aparencia" accept="image/*" required>
     </div>
 
@@ -117,7 +156,7 @@
     <button type="submit">Enviar Ficha</button>
   </form>
 
-  <script>
+<script>
     const webhookURL = 'https://discord.com/api/webhooks/1370785743785689139/goFrNn6cP22UDkjLwuNFT9j8iuk7Usye3CCv4x_XMec0_FntwvbyiyJ360tDjk8L1d1u';  // Substitua pelo seu webhook
 
     document.getElementById('fichaForm').addEventListener('submit', async (e) => {
