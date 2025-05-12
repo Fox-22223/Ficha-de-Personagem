@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ficha Sombria - Envio</title>
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
@@ -31,12 +31,14 @@
 
       <div class="form-group">
         <label for="historia">📜 História:</label>
-        <textarea id="historia" name="historia" rows="5" required></textarea>
+        <textarea id="historia" name="historia" rows="5" maxlength="2000" required></textarea>
+        <div class="char-count"><span id="historia-count">0</span>/2000</div>
       </div>
 
       <div class="form-group">
         <label for="poderes">⚡ Poderes:</label>
-        <textarea id="poderes" name="poderes" rows="3" required></textarea>
+        <textarea id="poderes" name="poderes" rows="3" maxlength="2000" required></textarea>
+        <div class="char-count"><span id="poderes-count">0</span>/2000</div>
       </div>
 
       <div class="form-group">
@@ -59,9 +61,30 @@
   </section>
 
   <footer>
-    <p>&copy; 2025 Ficha Sombria | Feito com 💀 por <a href="#">Fox</a></p> 
+    <p>&copy; 2025 Ficha Sombria | Feito com 💀 por <a href="#">Fox</a></p>
   </footer>
 
-  <script src="script.js"></script>
+  <script>
+    const historia = document.getElementById('historia');
+    const poderes = document.getElementById('poderes');
+    const historiaCount = document.getElementById('historia-count');
+    const poderesCount = document.getElementById('poderes-count');
+
+    function updateCount(textarea, countSpan) {
+      const length = textarea.value.length;
+      countSpan.textContent = length;
+      if (length >= 1900) {
+        countSpan.style.color = 'red';
+      } else if (length >= 1500) {
+        countSpan.style.color = 'orange';
+      } else {
+        countSpan.style.color = '#ccc';
+      }
+    }
+
+    historia.addEventListener('input', () => updateCount(historia, historiaCount));
+    poderes.addEventListener('input', () => updateCount(poderes, poderesCount));
+  </script>
 </body>
 </html>
+
