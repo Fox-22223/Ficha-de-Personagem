@@ -150,3 +150,10 @@ footer a:hover {
 button:active {
   transform: scale(0.98);
 }
+
+.char-count {
+  text-align: right;
+  font-size: 0.9rem;
+  margin-top: 5px;
+  color: #ccc;
+}
