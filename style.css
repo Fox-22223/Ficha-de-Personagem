@@ -1,156 +1,152 @@
 body {
-  background-color: #121212;
-  color: #e6e6e6;
-  font-family: 'Arial', sans-serif;
+  background-color: #181818;
+  color: #e0e0e0;
+  font-family: 'Roboto', sans-serif;
   margin: 0;
   padding: 0;
-  line-height: 1.6;
 }
 
 header {
-  background-color: #1a1a1a;
-  padding: 40px 20px;
+  background-color: #121212;
+  padding: 40px;
   text-align: center;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  border-bottom: 3px solid #444;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
 }
 
 h1 {
   font-size: 3rem;
-  color: crimson;
-  text-shadow: 0 0 15px crimson, 0 0 25px crimson;
+  color: #ff6347;
+  text-shadow: 0 0 15px #ff6347, 0 0 25px #ff6347;
   margin: 0;
 }
 
-form {
-  width: 650px;
-  margin: 40px auto;
-  background-color: #1a1a1a;
-  padding: 35px;
+.form-container {
+  max-width: 900px;
+  margin: 30px auto;
+  background-color: #222;
+  padding: 40px;
   border-radius: 12px;
-  box-shadow: 0 0 20px rgba(102, 0, 0, 0.8);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-form:hover {
-  transform: scale(1.02);
-  box-shadow: 0 0 25px rgba(102, 0, 0, 0.8);
-}
-
-h2 {
-  border-left: 5px solid crimson;
-  padding-left: 12px;
-  margin-top: 40px;
-  color: #ff4c4c;
-  text-shadow: 0 0 5px #ff1a1a;
-}
-
-label {
-  display: block;
-  margin-top: 15px;
-  font-size: 1.1rem;
-  font-weight: bold;
-  color: #ff6347;
-}
-
-input,
-textarea,
-button {
-  width: 100%;
-  padding: 12px;
-  margin-top: 12px;
-  border-radius: 8px;
-  border: none;
-  background-color: #333;
-  color: #fff;
-  font-size: 1rem;
-  transition: border 0.3s ease, background-color 0.3s ease;
-}
-
-input:focus,
-textarea:focus {
-  background-color: #444;
-  border: 2px solid crimson;
-  outline: none;
-}
-
-textarea {
-  min-height: 120px;
-  resize: vertical;
-}
-
-button {
-  background-color: crimson;
-  cursor: pointer;
-  font-size: 1.3rem;
-  transition: background-color 0.3s ease, transform 0.1s ease;
-  margin-top: 20px;
-  padding: 15px;
-  border-radius: 8px;
-}
-
-button:hover {
-  background-color: darkred;
-}
-
-button:active {
-  transform: scale(0.98);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
 }
 
 .form-group {
   margin-bottom: 25px;
+  position: relative;
+}
+
+label {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #ff6347;
+  text-shadow: 0 0 5px #ff6347;
+  display: block;
+  margin-bottom: 10px;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 12px;
+  background-color: #333;
+  border: 1px solid #444;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 1rem;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+input:focus, textarea:focus {
+  border-color: #ff6347;
+  outline: none;
+}
+
+textarea {
+  resize: none;
+}
+
+button {
+  background-color: #ff6347;
+  border: none;
+  color: white;
+  padding: 15px 25px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  border-radius: 8px;
+  width: 100%;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #d9534f;
 }
 
 .upload-label {
-  display: inline-block;
   background-color: #292929;
-  color: #fff;
-  padding: 14px 25px;
+  padding: 15px 30px;
   border-radius: 8px;
+  color: #fff;
   cursor: pointer;
-  font-size: 1rem;
+  display: inline-block;
   text-align: center;
-  margin-top: 15px;
+  font-size: 1.2rem;
   border: 2px dashed #444;
-  transition: all 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  margin-top: 15px;
 }
 
 .upload-label:hover {
-  background-color: #333;
-  border-color: crimson;
-  color: crimson;
+  background-color: #444;
+  color: #ff6347;
 }
 
 input[type="file"] {
   display: none;
 }
 
-/* Additional Animations */
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
-}
-
-h1 {
-  animation: pulse 1.5s infinite;
-}
-
 footer {
-  background-color: #1a1a1a;
-  padding: 20px;
   text-align: center;
-  color: #888;
+  padding: 20px;
+  background-color: #121212;
+  color: #999;
+  font-size: 1rem;
   position: fixed;
   width: 100%;
   bottom: 0;
-  font-size: 0.9rem;
 }
 
 footer a {
   color: #ff6347;
   text-decoration: none;
+  font-weight: bold;
 }
 
 footer a:hover {
   color: #d9534f;
+}
+
+.form-group::after {
+  content: "💀";
+  position: absolute;
+  top: 50%;
+  right: -30px;
+  transform: translateY(-50%);
+  font-size: 2rem;
+  color: #ff6347;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: translateY(-50%) scale(1); }
+  50% { transform: translateY(-50%) scale(1.2); }
+  100% { transform: translateY(-50%) scale(1); }
+}
+
+.form-container input:focus,
+.form-container textarea:focus {
+  box-shadow: 0 0 10px rgba(255, 99, 71, 0.8);
+}
+
+button:active {
+  transform: scale(0.98);
 }
